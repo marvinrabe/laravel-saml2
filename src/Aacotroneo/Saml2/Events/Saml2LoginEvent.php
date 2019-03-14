@@ -2,10 +2,11 @@
 
 namespace Aacotroneo\Saml2\Events;
 
-use Aacotroneo\Saml2\Saml2User;
 use Aacotroneo\Saml2\Saml2Auth;
+use Aacotroneo\Saml2\Saml2User;
 
-class Saml2LoginEvent {
+class Saml2LoginEvent
+{
 
     protected $user;
     protected $auth;

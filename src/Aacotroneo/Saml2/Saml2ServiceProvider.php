@@ -1,10 +1,11 @@
 <?php
+
 namespace Aacotroneo\Saml2;
 
+use Illuminate\Support\ServiceProvider;
 use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
 use OneLogin\Saml2\Utils as OneLogin_Saml2_Utils;
 use URL;
-use Illuminate\Support\ServiceProvider;
 
 class Saml2ServiceProvider extends ServiceProvider
 {
@@ -23,15 +24,15 @@ class Saml2ServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(config('saml2_settings.useRoutes', false) == true ){
+        if (config('saml2.useRoutes', false) == true) {
             include __DIR__ . '/../../routes.php';
         }
 
         $this->publishes([
-            __DIR__.'/../../config/saml2_settings.php' => config_path('saml2_settings.php'),
+            __DIR__ . '/../../config/saml2.php' => config_path('saml2.php'),
         ]);
 
-        if (config('saml2_settings.proxyVars', false)) {
+        if (config('saml2.proxyVars', false)) {
             OneLogin_Saml2_Utils::setProxyVars(true);
         }
     }
@@ -55,7 +56,7 @@ class Saml2ServiceProvider extends ServiceProvider
     protected function registerOneLoginInContainer()
     {
         $this->app->singleton('OneLogin_Saml2_Auth', function ($app) {
-            $config = config('saml2_settings');
+            $config = config('saml2');
             if (empty($config['sp']['entityId'])) {
                 $config['sp']['entityId'] = URL::route('saml_metadata');
             }
@@ -66,13 +67,13 @@ class Saml2ServiceProvider extends ServiceProvider
                 empty($config['sp']['singleLogoutService']['url'])) {
                 $config['sp']['singleLogoutService']['url'] = URL::route('saml_sls');
             }
-            if (strpos($config['sp']['privateKey'], 'file://')===0) {
+            if (strpos($config['sp']['privateKey'], 'file://') === 0) {
                 $config['sp']['privateKey'] = $this->extractPkeyFromFile($config['sp']['privateKey']);
             }
-            if (strpos($config['sp']['x509cert'], 'file://')===0) {
+            if (strpos($config['sp']['x509cert'], 'file://') === 0) {
                 $config['sp']['x509cert'] = $this->extractCertFromFile($config['sp']['x509cert']);
             }
-            if (strpos($config['idp']['x509cert'], 'file://')===0) {
+            if (strpos($config['idp']['x509cert'], 'file://') === 0) {
                 $config['idp']['x509cert'] = $this->extractCertFromFile($config['idp']['x509cert']);
             }
 
@@ -87,10 +88,11 @@ class Saml2ServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array();
+        return [];
     }
 
-    protected function extractPkeyFromFile($path) {
+    protected function extractPkeyFromFile($path)
+    {
         $res = openssl_get_privatekey($path);
         if (empty($res)) {
             throw new \Exception('Could not read private key-file at path \'' . $path . '\'');
@@ -100,7 +102,8 @@ class Saml2ServiceProvider extends ServiceProvider
         return $this->extractOpensslString($pkey, 'PRIVATE KEY');
     }
 
-    protected function extractCertFromFile($path) {
+    protected function extractCertFromFile($path)
+    {
         $res = openssl_x509_read(file_get_contents($path));
         if (empty($res)) {
             throw new \Exception('Could not read X509 certificate-file at path \'' . $path . '\'');
@@ -110,7 +113,8 @@ class Saml2ServiceProvider extends ServiceProvider
         return $this->extractOpensslString($cert, 'CERTIFICATE');
     }
 
-    protected function extractOpensslString($keyString, $delimiter) {
+    protected function extractOpensslString($keyString, $delimiter)
+    {
         $keyString = str_replace(["\r", "\n"], "", $keyString);
         $regex = '/-{5}BEGIN(?:\s|\w)+' . $delimiter . '-{5}\s*(.+?)\s*-{5}END(?:\s|\w)+' . $delimiter . '-{5}/m';
         preg_match($regex, $keyString, $matches);

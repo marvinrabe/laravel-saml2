@@ -1,4 +1,5 @@
 <?php
+
 namespace Aacotroneo\Saml2\Facades;
 
 use Illuminate\Support\Facades\Facade;
@@ -13,7 +14,7 @@ class Saml2Auth extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Aacotroneo\Saml2\Saml2Auth';
+        return \Aacotroneo\Saml2\Saml2Auth::class;
     }
 
-} 
+}

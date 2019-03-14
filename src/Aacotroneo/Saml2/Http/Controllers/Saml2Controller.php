@@ -4,8 +4,8 @@ namespace Aacotroneo\Saml2\Http\Controllers;
 
 use Aacotroneo\Saml2\Events\Saml2LoginEvent;
 use Aacotroneo\Saml2\Saml2Auth;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 
 class Saml2Controller extends Controller
@@ -48,7 +48,7 @@ class Saml2Controller extends Controller
 
             logger()->error('Saml2 error', $errors);
             session()->flash('saml2_error', $errors);
-            return redirect(config('saml2_settings.errorRoute'));
+            return redirect(config('saml2.errorRoute'));
         }
         $user = $this->saml2Auth->getSaml2User();
 
@@ -60,7 +60,7 @@ class Saml2Controller extends Controller
             return redirect($redirectUrl);
         } else {
 
-            return redirect(config('saml2_settings.loginRoute'));
+            return redirect(config('saml2.loginRoute'));
         }
     }
 
@@ -71,12 +71,12 @@ class Saml2Controller extends Controller
      */
     public function sls()
     {
-        $error = $this->saml2Auth->sls(config('saml2_settings.retrieveParametersFromServer'));
+        $error = $this->saml2Auth->sls(config('saml2.retrieveParametersFromServer'));
         if (!empty($error)) {
             throw new \Exception("Could not log out");
         }
 
-        return redirect(config('saml2_settings.logoutRoute')); //may be set a configurable default
+        return redirect(config('saml2.logoutRoute')); //may be set a configurable default
     }
 
     /**
@@ -88,16 +88,14 @@ class Saml2Controller extends Controller
         $sessionIndex = $request->query('sessionIndex');
         $nameId = $request->query('nameId');
         $this->saml2Auth->logout($returnTo, $nameId, $sessionIndex); //will actually end up in the sls endpoint
-        //does not return
     }
-
 
     /**
      * This initiates a login request
      */
     public function login()
     {
-        $this->saml2Auth->login(config('saml2_settings.loginRoute'));
+        $this->saml2Auth->login(config('saml2.loginRoute'));
     }
 
 }
