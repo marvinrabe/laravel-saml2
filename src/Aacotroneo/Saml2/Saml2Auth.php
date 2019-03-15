@@ -62,6 +62,7 @@ class Saml2Auth
      * @param bool $setNameIdPolicy When true the AuthNReuqest will set a nameIdPolicy element
      *
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
+     * @throws OneLogin_Saml2_Error
      */
     function login($returnTo = null, $parameters = [], $forceAuthn = false, $isPassive = false, $stay = false, $setNameIdPolicy = true)
     {
@@ -143,6 +144,7 @@ class Saml2Auth
      * Show metadata about the local sp. Use this to configure your saml2 IDP
      * @return mixed xml string representing metadata
      * @throws \InvalidArgumentException if metadata is not correctly set
+     * @throws OneLogin_Saml2_Error
      */
     function getMetadata()
     {
