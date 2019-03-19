@@ -2,10 +2,11 @@
 
 namespace Aacotroneo\Saml2\Http\Controllers;
 
-use Aacotroneo\Saml2\Events\Login;
 use Aacotroneo\Saml2\Auth;
+use Aacotroneo\Saml2\Events\Login;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 
 
 class Saml2Controller extends Controller
@@ -25,6 +26,7 @@ class Saml2Controller extends Controller
     /**
      * Generate local sp metadata
      * @return \Illuminate\Http\Response
+     * @throws \OneLogin\Saml2\Error
      */
     public function metadata()
     {
@@ -40,27 +42,27 @@ class Saml2Controller extends Controller
      */
     public function acs()
     {
-        $errors = $this->saml2Auth->acs();
+        try {
+            $errors = $this->saml2Auth->acs();
 
-        if (!empty($errors)) {
-            logger()->error('Saml2 error_detail', ['error' => $this->saml2Auth->getLastErrorReason()]);
-            session()->flash('saml2_error_detail', [$this->saml2Auth->getLastErrorReason()]);
+            if (!empty($errors)) {
+                throw new \RuntimeException($this->saml2Auth->getLastErrorReason());
+            }
 
-            logger()->error('Saml2 error', $errors);
-            session()->flash('saml2_error', $errors);
-            return redirect(config('saml2.errorRoute'));
-        }
-        $user = $this->saml2Auth->getSaml2User();
+            $user = $this->saml2Auth->getSaml2User();
 
-        event(new Login($user, $this->saml2Auth));
+            event(new Login($user, $this->saml2Auth));
 
-        $redirectUrl = $user->getIntendedUrl();
+            $redirectUrl = $user->getIntendedUrl();
 
-        if ($redirectUrl !== null) {
-            return redirect($redirectUrl);
-        } else {
-
+            if ($redirectUrl !== null) {
+                return redirect($redirectUrl);
+            }
             return redirect(config('saml2.loginRoute'));
+
+        } catch (\Exception $e) {
+            Log::error('SSO failed: ' . $e->getMessage());
+            return redirect(config('saml2.errorRoute'));
         }
     }
 
