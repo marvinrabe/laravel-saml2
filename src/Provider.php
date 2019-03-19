@@ -23,11 +23,11 @@ class Provider extends ServiceProviderContract
     public function boot()
     {
         if (config('saml2.useRoutes', false) == true) {
-            include __DIR__ . '/../../routes.php';
+            include __DIR__ . '/../config/routes.php';
         }
 
         $this->publishes([
-            __DIR__ . '/../../config/saml2.php' => config_path('saml2.php'),
+            __DIR__ . '/../config/saml2.php' => config_path('saml2.php'),
         ]);
 
         if (config('saml2.proxyVars', false)) {

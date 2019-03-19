@@ -4,7 +4,7 @@ namespace Aacotroneo\Saml2\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Auth extends Facade
+class Saml2Auth extends Facade
 {
 
     /**

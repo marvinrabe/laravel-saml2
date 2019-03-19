@@ -1,6 +1,5 @@
 <?php
 
-
 Route::group([
     'prefix' => config('saml2.routesPrefix'),
     'middleware' => config('saml2.routesMiddleware'),
