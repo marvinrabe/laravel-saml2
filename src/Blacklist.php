@@ -27,7 +27,9 @@ class Blacklist
      */
     public function add($messageId)
     {
-        Cache::forever($this->key, array_push($this->get(), $messageId));
+        $list = $this->get();
+        $list[] = $messageId;
+        Cache::forever($this->key, $list);
     }
 
     /**
