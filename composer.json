@@ -28,10 +28,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Aacotroneo\\Saml2\\Saml2ServiceProvider"
+                "Aacotroneo\\Saml2\\Provider"
             ],
             "aliases": {
-                "Saml2": "Aacotroneo\\Saml2\\Facades\\Saml2Auth"
+                "Saml2": "Aacotroneo\\Saml2\\Facades\\Auth"
             }
         }
     },
