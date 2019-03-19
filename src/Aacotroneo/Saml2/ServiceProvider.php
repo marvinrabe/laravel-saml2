@@ -2,24 +2,22 @@
 
 namespace Aacotroneo\Saml2;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider as ServiceProviderContract;
 use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
 use OneLogin\Saml2\Utils as OneLogin_Saml2_Utils;
-use URL;
 
-class Saml2ServiceProvider extends ServiceProvider
+class ServiceProvider extends ServiceProviderContract
 {
 
     /**
      * Indicates if loading of the provider is deferred.
-     *
      * @var bool
      */
     protected $defer = false;
 
     /**
      * Bootstrap the application events.
-     *
      * @return void
      */
     public function boot()
@@ -39,18 +37,15 @@ class Saml2ServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
      * @return void
      */
     public function register()
     {
         $this->registerOneLoginInContainer();
 
-        $this->app->singleton('Aacotroneo\Saml2\Saml2Auth', function ($app) {
-
-            return new \Aacotroneo\Saml2\Saml2Auth($app['OneLogin_Saml2_Auth']);
+        $this->app->singleton(Auth::class, function ($app) {
+            return new Auth($app['OneLogin_Saml2_Auth']);
         });
-
     }
 
     protected function registerOneLoginInContainer()
@@ -83,7 +78,6 @@ class Saml2ServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
-     *
      * @return array
      */
     public function provides()

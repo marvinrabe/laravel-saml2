@@ -2,8 +2,8 @@
 
 namespace Aacotroneo\Saml2\Http\Controllers;
 
-use Aacotroneo\Saml2\Events\Saml2LoginEvent;
-use Aacotroneo\Saml2\Saml2Auth;
+use Aacotroneo\Saml2\Events\Login;
+use Aacotroneo\Saml2\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -14,9 +14,9 @@ class Saml2Controller extends Controller
     protected $saml2Auth;
 
     /**
-     * @param Saml2Auth $saml2Auth injected.
+     * @param Auth $saml2Auth injected.
      */
-    function __construct(Saml2Auth $saml2Auth)
+    function __construct(Auth $saml2Auth)
     {
         $this->saml2Auth = $saml2Auth;
     }
@@ -52,7 +52,7 @@ class Saml2Controller extends Controller
         }
         $user = $this->saml2Auth->getSaml2User();
 
-        event(new Saml2LoginEvent($user, $this->saml2Auth));
+        event(new Login($user, $this->saml2Auth));
 
         $redirectUrl = $user->getIntendedUrl();
 

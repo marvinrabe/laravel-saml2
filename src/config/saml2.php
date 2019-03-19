@@ -3,6 +3,11 @@
 return $settings = [
 
     /**
+     * Prefix for the SAML2 routes.
+     */
+    'routesPrefix' => '/saml2',
+
+    /**
      * If 'useRoutes' is set to true, the package defines five new routes:
      *    Method | URI                      | Name
      *    -------|--------------------------|------------------
@@ -13,8 +18,6 @@ return $settings = [
      *    GET    | {routesPrefix}/sls       | saml_sls
      */
     'useRoutes' => true,
-
-    'routesPrefix' => '/saml2',
 
     /**
      * which middleware group to use for the saml routes
@@ -37,7 +40,6 @@ return $settings = [
      * Where to redirect after login if no other option was provided
      */
     'loginRoute' => '/',
-
 
     /**
      * Where to redirect after login if no other option was provided

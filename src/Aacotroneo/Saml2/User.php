@@ -9,7 +9,7 @@ use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
  * Class Saml2User
  * @package Aacotroneo\Saml2
  */
-class Saml2User
+class User
 {
 
     protected $auth;
@@ -42,7 +42,6 @@ class Saml2User
 
     /**
      * Returns the requested SAML attribute
-     *
      * @param string $name The requested attribute of the user.
      * @return array|null Requested SAML attribute ($name).
      */
@@ -85,7 +84,6 @@ class Saml2User
 
     /**
      * Parses a SAML property and adds this property to this user or returns the value
-     *
      * @param string $samlAttribute
      * @param string $propertyName
      * @return array|null
@@ -104,7 +102,6 @@ class Saml2User
 
     /**
      * Parse the saml attributes and adds it to this user
-     *
      * @param array $attributes Array of properties which need to be parsed, like this ['email' => 'urn:oid:0.9.2342.19200300.100.1.3']
      */
     function parseAttributes($attributes = [])
