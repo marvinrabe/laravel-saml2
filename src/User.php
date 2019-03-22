@@ -2,7 +2,7 @@
 
 namespace Aacotroneo\Saml2;
 
-use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
+use OneLogin\Saml2\Auth as OneLoginAuth;
 
 /**
  * A simple class that represents the user that 'came' inside the saml2 assertion
@@ -14,7 +14,7 @@ class User
 
     protected $auth;
 
-    function __construct(OneLogin_Saml2_Auth $auth)
+    function __construct(OneLoginAuth $auth)
     {
         $this->auth = $auth;
     }
@@ -24,10 +24,7 @@ class User
      */
     function getUserId()
     {
-        $auth = $this->auth;
-
-        return $auth->getNameId();
-
+        return $this->auth->getNameId();
     }
 
     /**
@@ -35,9 +32,7 @@ class User
      */
     function getAttributes()
     {
-        $auth = $this->auth;
-
-        return $auth->getAttributes();
+        return $this->auth->getAttributes();
     }
 
     /**
@@ -47,9 +42,7 @@ class User
      */
     function getAttribute($name)
     {
-        $auth = $this->auth;
-
-        return $auth->getAttribute($name);
+        return $this->auth->getAttribute($name);
     }
 
     /**
@@ -57,9 +50,7 @@ class User
      */
     function getAttributesWithFriendlyName()
     {
-        $auth = $this->auth;
-
-        return $auth->getAttributesWithFriendlyName();
+        return $this->auth->getAttributesWithFriendlyName();
     }
 
     /**
@@ -77,7 +68,6 @@ class User
         $url = app('Illuminate\Contracts\Routing\UrlGenerator');
 
         if ($relayState && $url->full() != $relayState) {
-
             return $relayState;
         }
     }
@@ -114,11 +104,6 @@ class User
     function getSessionIndex()
     {
         return $this->auth->getSessionIndex();
-    }
-
-    function getNameId()
-    {
-        return $this->auth->getNameId();
     }
 
 }

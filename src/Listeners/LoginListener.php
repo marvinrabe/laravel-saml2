@@ -25,13 +25,13 @@ abstract class LoginListener
         $messageId = $event->getAuth()->getLastMessageId();
 
         if ($this->blacklist->has($messageId)) {
-            Log::info('SSO failed: Message ID blacklisted' . $messageId);
+            Log::info('SSO failed: Message ID blacklisted', ['messageId' => $messageId]);
             return;
         }
 
         $this->blacklist->add($messageId);
 
-        Log::info('SSO: ' . $event->getUser()->getUserId());
+        Log::info('SSO: ' . $event->getUser()->getUserId(), ['attributes' => $event->getUser()->getAttributes()]);
 
         Auth::login($this->findUser($event->getUser()));
     }
