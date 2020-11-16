@@ -3,20 +3,19 @@
 namespace Aacotroneo\Saml2;
 
 use Aacotroneo\Saml2\Events\Logout;
-use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
-use OneLogin\Saml2\Error as OneLogin_Saml2_Error;
+use OneLogin\Saml2\Auth as SAMLAuth;
+use OneLogin\Saml2\Error as SAMLError;
 
 class Auth
 {
-
     /**
-     * @var \OneLogin_Saml2_Auth
+     * @var \OneLogin\Saml2\Auth
      */
     protected $auth;
 
     protected $samlAssertion;
 
-    public function __construct(OneLogin_Saml2_Auth $auth)
+    public function __construct(SAMLAuth $auth)
     {
         $this->auth = $auth;
     }
@@ -52,14 +51,14 @@ class Auth
     /**
      * Initiate a saml2 login flow. It will redirect! Before calling this, check if user is
      * authenticated (here in saml2). That would be true when the assertion was received this request.
-     * @param string|null $returnTo The target URL the user should be returned to after login.
-     * @param array $parameters Extra parameters to be added to the GET
-     * @param bool $forceAuthn When true the AuthNReuqest will set the ForceAuthn='true'
-     * @param bool $isPassive When true the AuthNReuqest will set the Ispassive='true'
-     * @param bool $stay True if we want to stay (returns the url string) False to redirect
-     * @param bool $setNameIdPolicy When true the AuthNReuqest will set a nameIdPolicy element
+     * @param  string|null  $returnTo  The target URL the user should be returned to after login.
+     * @param  array  $parameters  Extra parameters to be added to the GET
+     * @param  bool  $forceAuthn  When true the AuthNReuqest will set the ForceAuthn='true'
+     * @param  bool  $isPassive  When true the AuthNReuqest will set the Ispassive='true'
+     * @param  bool  $stay  True if we want to stay (returns the url string) False to redirect
+     * @param  bool  $setNameIdPolicy  When true the AuthNReuqest will set a nameIdPolicy element
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
-     * @throws OneLogin_Saml2_Error
+     * @throws \OneLogin\Saml2\Error
      */
     public function login(
         $returnTo = null,
@@ -77,14 +76,14 @@ class Auth
     /**
      * Initiate a saml2 logout flow. It will close session on all other SSO services. You should close
      * local session if applicable.
-     * @param string|null $returnTo The target URL the user should be returned to after logout.
-     * @param string|null $nameId The NameID that will be set in the LogoutRequest.
-     * @param string|null $sessionIndex The SessionIndex (taken from the SAML Response in the SSO process).
-     * @param string|null $nameIdFormat The NameID Format will be set in the LogoutRequest.
-     * @param bool $stay True if we want to stay (returns the url string) False to redirect
-     * @param string|null $nameIdNameQualifier The NameID NameQualifier will be set in the LogoutRequest.
+     * @param  string|null  $returnTo  The target URL the user should be returned to after logout.
+     * @param  string|null  $nameId  The NameID that will be set in the LogoutRequest.
+     * @param  string|null  $sessionIndex  The SessionIndex (taken from the SAML Response in the SSO process).
+     * @param  string|null  $nameIdFormat  The NameID Format will be set in the LogoutRequest.
+     * @param  bool  $stay  True if we want to stay (returns the url string) False to redirect
+     * @param  string|null  $nameIdNameQualifier  The NameID NameQualifier will be set in the LogoutRequest.
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
-     * @throws OneLogin_Saml2_Error
+     * @throws \OneLogin\Saml2\Error
      */
     public function logout(
         $returnTo = null,
@@ -105,19 +104,15 @@ class Auth
      */
     public function acs()
     {
+        $this->auth->processResponse();
 
-        /** @var $auth OneLogin_Saml2_Auth */
-        $auth = $this->auth;
+        $errors = $this->auth->getErrors();
 
-        $auth->processResponse();
-
-        $errors = $auth->getErrors();
-
-        if (! empty($errors)) {
+        if (!empty($errors)) {
             return $errors;
         }
 
-        if (! $auth->isAuthenticated()) {
+        if (!$this->auth->isAuthenticated()) {
             return ['error' => 'Could not authenticate'];
         }
 
@@ -149,7 +144,7 @@ class Auth
      * Show metadata about the local sp. Use this to configure your saml2 IDP
      * @return mixed xml string representing metadata
      * @throws \InvalidArgumentException if metadata is not correctly set
-     * @throws OneLogin_Saml2_Error
+     * @throws \OneLogin\Saml2\Error
      */
     public function getMetadata()
     {
@@ -162,16 +157,16 @@ class Auth
             return $metadata;
         } else {
             throw new \InvalidArgumentException(
-                'Invalid SP metadata: ' . implode(', ', $errors),
-                OneLogin_Saml2_Error::METADATA_SP_INVALID
+                'Invalid SP metadata: '.implode(', ', $errors),
+                SAMLError::METADATA_SP_INVALID
             );
         }
     }
 
     /**
-     * Get the last error reason from \OneLogin_Saml2_Auth, useful for error debugging.
-     * @see \OneLogin_Saml2_Auth::getLastErrorReason()
+     * Get the last error reason from \OneLogin\Saml2\Auth, useful for error debugging.
      * @return string
+     * @see \OneLogin\Saml2\Auth::getLastErrorReason()
      */
     public function getLastErrorReason()
     {
