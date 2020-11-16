@@ -20,11 +20,6 @@ class Saml2Controller extends Controller
         $this->saml2Auth = $saml2Auth;
     }
 
-    /**
-     * Generate local sp metadata
-     * @return \Illuminate\Http\Response
-     * @throws \OneLogin\Saml2\Error
-     */
     public function metadata()
     {
         $metadata = $this->saml2Auth->getMetadata();

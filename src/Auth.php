@@ -165,7 +165,7 @@ class Auth
 
     /**
      * Get the last error reason from \OneLogin\Saml2\Auth, useful for error debugging.
-     * @return string
+     * @return string|null
      * @see \OneLogin\Saml2\Auth::getLastErrorReason()
      */
     public function getLastErrorReason()

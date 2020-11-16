@@ -23,7 +23,7 @@ class Blacklist
 
     /**
      * Add the message id to the blacklist.
-     * @param  string $messageId
+     * @param  string  $messageId
      */
     public function add($messageId)
     {
@@ -34,7 +34,7 @@ class Blacklist
 
     /**
      * Determine whether the message id has been blacklisted.
-     * @param  string $messageId
+     * @param  string  $messageId
      * @return bool
      */
     public function has($messageId)
@@ -44,7 +44,6 @@ class Blacklist
 
     /**
      * Remove all tokens from the blacklist.
-     * @return bool
      */
     public function clear()
     {
