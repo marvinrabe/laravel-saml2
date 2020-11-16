@@ -1,7 +1,7 @@
 # Laravel SAML 2
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/marvinrabe/laravel-saml2.svg?style=flat-square)](https://packagist.org/packages/marvinrabe/laravel-saml2)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/marvinrabe/laravel-saml2/run-tests?label=tests)](https://github.com/marvinrabe/laravel-saml2/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/marvinrabe/laravel-saml2/Tests?label=tests)](https://github.com/marvinrabe/laravel-saml2/actions?query=workflow%3ATests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/marvinrabe/laravel-saml2.svg?style=flat-square)](https://packagist.org/packages/marvinrabe/laravel-saml2)
 
 Saml2 integration as a SP (service provider) for Laravel based on OneLogin toolkit.
