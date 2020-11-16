@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider as ServiceProviderContract;
 use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
 use OneLogin\Saml2\Utils as OneLogin_Saml2_Utils;
 
-class Provider extends ServiceProviderContract
+class SAML2ServiceProvider extends ServiceProviderContract
 {
 
     /**

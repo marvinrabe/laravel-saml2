@@ -1,39 +1,65 @@
 {
-    "name": "aacotroneo/laravel-saml2",
-    "description": "A Laravel package for Saml2 integration as a SP (service provider) based on OneLogin toolkit, which is much lightweight than simplesamlphp",
-    "keywords": ["laravel","saml", "saml2", "onelogin"],
-    "homepage": "https://github.com/aacotroneo/laravel-saml2",
-    "license": "MIT",
-    "version": "1.0.0",
-    "authors": [
-        {
-            "name": "aacotroneo",
-            "email": "aacotroneo@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=7.0.0",
-        "ext-openssl": "*",
-        "illuminate/support": ">=5.5.0",
-        "onelogin/php-saml": "^3.0.0"
+  "name": "marvinrabe/laravel-saml2",
+  "description": "Saml2 integration as a SP (service provider) for Laravel based on OneLogin toolkit.",
+  "keywords": [
+    "laravel",
+    "authentication",
+    "saml2",
+    "onelogin"
+  ],
+  "homepage": "https://github.com/marvinrabe/laravel-saml2",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "aacotroneo",
+      "email": "aacotroneo@gmail.com"
     },
-    "require-dev": {
-        "mockery/mockery": "0.9.*"
-    },
-    "autoload": {
-        "psr-0": {
-            "Aacotroneo\\Saml2\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Aacotroneo\\Saml2\\Provider"
-            ],
-            "aliases": {
-                "Saml2Auth": "Aacotroneo\\Saml2\\Facades\\Saml2Auth"
-            }
-        }
-    },
-    "minimum-stability": "stable"
+    {
+      "name": "Marvin Rabe",
+      "email": "marvin.rabe@gmail.com",
+      "homepage": "https://www.srabe.pro",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "ext-openssl": "*",
+    "illuminate/support": ">=5.5.0",
+    "onelogin/php-saml": "^3.0.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^6.0",
+    "phpunit/phpunit": "^9.3",
+    "vimeo/psalm": "^3.11"
+  },
+  "autoload": {
+    "psr-4": {
+      "Aacotroneo\\Saml2\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MarvinRabe\\LaravelSAML2\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "psalm": "vendor/bin/psalm",
+    "test": "vendor/bin/phpunit --colors=always",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Aacotroneo\\Saml2\\SAML2ServiceProvider"
+      ],
+      "aliases": {
+        "Saml2Auth": "Aacotroneo\\Saml2\\Facades\\Saml2Auth"
+      }
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

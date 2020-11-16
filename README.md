@@ -1,21 +1,26 @@
-## Laravel 5 - Saml2
+# Laravel SAML 2
 
-[![Build Status](https://travis-ci.org/aacotroneo/laravel-saml2.svg)](https://travis-ci.org/aacotroneo/laravel-saml2)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/marvinrabe/laravel-saml2.svg?style=flat-square)](https://packagist.org/packages/marvinrabe/laravel-saml2)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/marvinrabe/laravel-saml2/run-tests?label=tests)](https://github.com/marvinrabe/laravel-saml2/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/marvinrabe/laravel-saml2.svg?style=flat-square)](https://packagist.org/packages/marvinrabe/laravel-saml2)
 
-A Laravel package for Saml2 integration as a SP (service provider) based on  [OneLogin](https://github.com/onelogin/php-saml) toolkit, which is much lighter and easier to install than simplesamlphp SP. It doesn't need separate routes or session storage to work!
+Saml2 integration as a SP (service provider) for Laravel based on OneLogin toolkit.
 
-The aim of this library is to be as simple as possible. We won't mess with Laravel users, auth, session...  We prefer to limit ourselves to a concrete task. Ask the user to authenticate at the IDP and process the response. Same case for SLO requests.
-
-
-## Installation - Composer
+## Installation
 
 You can install the package via composer:
 
-```
-composer require aacotroneo/laravel-saml2
+```bash
+composer require marvinrabe/laravel-saml2
 ```
 
-Then publish the config file with `php artisan vendor:publish --provider="Aacotroneo\Saml2\Saml2ServiceProvider"`. This config is handled almost directly by [OneLogin](https://github.com/onelogin/php-saml) so you may get further references there, but will cover here what's really necessary. There are some other configurations about routes you may want to check, they are pretty straightforward.
+You can publish the config file with:
+
+```bash
+php artisan vendor:publish --provider="Aacotroneo\Saml2\Saml2ServiceProvider"
+```
+
+This config is almost identical to that of [OneLogin](https://github.com/onelogin/php-saml). There are also some other configurations about routes you may want to check, they are pretty straightforward.
 
 ### Configuration
 
@@ -33,9 +38,10 @@ $metadata['http://laravel_url/saml2/metadata'] = array(
 );
 ```
 
-You can check the metadata if you actually navigate to 'http://laravel_url/saml2/metadata'
+You can check the metadata if you actually navigate to 'http://yourdomain.test/saml2/metadata'
 
-### Usage
+## Usage
+
 
 When you want your user to login, just call `Saml2Auth::login()` or redirect to route 'saml2_login'. Just remember that it does not use any session storage, so if you ask it to login it will redirect to the IDP whether the user is logged in or not. For example, you can change your authentication middleware.
 ```php
@@ -140,5 +146,12 @@ Note that for case 2, you may have to manually save your session to make the log
         });
 ```
 
+## Testing
 
-That's it. Feel free to ask any questions, make PR or suggestions, or open Issues.
+``` bash
+composer test
+```
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

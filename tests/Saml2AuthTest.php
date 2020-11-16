@@ -1,17 +1,12 @@
 <?php
 
-namespace Aacotroneo\Saml2;
+namespace MarvinRabe\LaravelSAML2\Tests;
 
+use Aacotroneo\Saml2\Auth;
 use Mockery as m;
-use PHPUnit\Framework\TestCase;
 
 class Saml2AuthTest extends TestCase
 {
-
-    public function tearDown()
-    {
-        m::close();
-    }
 
     public function testIsAuthenticated()
     {
@@ -43,9 +38,11 @@ class Saml2AuthTest extends TestCase
         $auth = m::mock('OneLogin\Saml2\Auth');
         $saml2 = new Auth($auth);
         $auth->shouldReceive('logout')
-            ->with($expectedReturnTo, [], $expectedNameId, $expectedSessionIndex, $expectedStay, $expectedNameIdFormat, $expectedNameIdNameQualifier)
+            ->with($expectedReturnTo, [], $expectedNameId, $expectedSessionIndex, $expectedStay, $expectedNameIdFormat,
+                $expectedNameIdNameQualifier)
             ->once();
-        $saml2->logout($expectedReturnTo, $expectedNameId, $expectedSessionIndex, $expectedNameIdFormat, $expectedStay, $expectedNameIdNameQualifier);
+        $saml2->logout($expectedReturnTo, $expectedNameId, $expectedSessionIndex, $expectedNameIdFormat, $expectedStay,
+            $expectedNameIdNameQualifier);
     }
 
 
@@ -174,4 +171,3 @@ class Saml2AuthTest extends TestCase
 
 
 }
-
