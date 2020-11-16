@@ -3,11 +3,11 @@
 namespace Aacotroneo\Saml2;
 
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\ServiceProvider as ServiceProviderContract;
+use Illuminate\Support\ServiceProvider;
 use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
 use OneLogin\Saml2\Utils as OneLogin_Saml2_Utils;
 
-class SAML2ServiceProvider extends ServiceProviderContract
+class SAML2ServiceProvider extends ServiceProvider
 {
 
     /**
@@ -23,7 +23,7 @@ class SAML2ServiceProvider extends ServiceProviderContract
     public function boot()
     {
         if (config('saml2.useRoutes', false) == true) {
-            include __DIR__ . '/../config/routes.php';
+            $this->loadRoutesFrom(__DIR__.'/../config/routes.php');
         }
 
         $this->publishes([
