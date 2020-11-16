@@ -108,11 +108,11 @@ class Auth
 
         $errors = $this->auth->getErrors();
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             return $errors;
         }
 
-        if (!$this->auth->isAuthenticated()) {
+        if (! $this->auth->isAuthenticated()) {
             return ['error' => 'Could not authenticate'];
         }
 
