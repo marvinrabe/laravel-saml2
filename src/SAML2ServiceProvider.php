@@ -58,7 +58,7 @@ class SAML2ServiceProvider extends ServiceProviderContract
             if (empty($config['sp']['assertionConsumerService']['url'])) {
                 $config['sp']['assertionConsumerService']['url'] = URL::route('saml_acs');
             }
-            if (!empty($config['sp']['singleLogoutService']) &&
+            if (! empty($config['sp']['singleLogoutService']) &&
                 empty($config['sp']['singleLogoutService']['url'])) {
                 $config['sp']['singleLogoutService']['url'] = URL::route('saml_sls');
             }
@@ -93,6 +93,7 @@ class SAML2ServiceProvider extends ServiceProviderContract
         }
         openssl_pkey_export($res, $pkey);
         openssl_pkey_free($res);
+
         return $this->extractOpensslString($pkey, 'PRIVATE KEY');
     }
 
@@ -104,6 +105,7 @@ class SAML2ServiceProvider extends ServiceProviderContract
         }
         openssl_x509_export($res, $cert);
         openssl_x509_free($res);
+
         return $this->extractOpensslString($cert, 'CERTIFICATE');
     }
 
@@ -112,6 +114,7 @@ class SAML2ServiceProvider extends ServiceProviderContract
         $keyString = str_replace(["\r", "\n"], "", $keyString);
         $regex = '/-{5}BEGIN(?:\s|\w)+' . $delimiter . '-{5}\s*(.+?)\s*-{5}END(?:\s|\w)+' . $delimiter . '-{5}/m';
         preg_match($regex, $keyString, $matches);
+
         return empty($matches[1]) ? '' : $matches[1];
     }
 }

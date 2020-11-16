@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Facade;
 
 class Saml2Auth extends Facade
 {
-
     /**
      * Get the registered name of the component.
      *
@@ -16,5 +15,4 @@ class Saml2Auth extends Facade
     {
         return \Aacotroneo\Saml2\Auth::class;
     }
-
 }

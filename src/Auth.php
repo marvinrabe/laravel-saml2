@@ -16,7 +16,7 @@ class Auth
 
     protected $samlAssertion;
 
-    function __construct(OneLogin_Saml2_Auth $auth)
+    public function __construct(OneLogin_Saml2_Auth $auth)
     {
         $this->auth = $auth;
     }
@@ -24,7 +24,7 @@ class Auth
     /**
      * @return bool if a valid user was fetched from the saml assertion this request.
      */
-    function isAuthenticated()
+    public function isAuthenticated()
     {
         $auth = $this->auth;
 
@@ -35,7 +35,7 @@ class Auth
      * The user info from the assertion
      * @return User
      */
-    function getSaml2User()
+    public function getSaml2User()
     {
         return new User($this->auth);
     }
@@ -44,7 +44,7 @@ class Auth
      * The ID of the last message processed
      * @return String
      */
-    function getLastMessageId()
+    public function getLastMessageId()
     {
         return $this->auth->getLastMessageId();
     }
@@ -61,7 +61,7 @@ class Auth
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
      * @throws OneLogin_Saml2_Error
      */
-    function login(
+    public function login(
         $returnTo = null,
         $parameters = [],
         $forceAuthn = false,
@@ -86,7 +86,7 @@ class Auth
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
      * @throws OneLogin_Saml2_Error
      */
-    function logout(
+    public function logout(
         $returnTo = null,
         $nameId = null,
         $sessionIndex = null,
@@ -103,7 +103,7 @@ class Auth
      * Process a Saml response (assertion consumer service)
      * When errors are encountered, it returns an array with proper description
      */
-    function acs()
+    public function acs()
     {
 
         /** @var $auth OneLogin_Saml2_Auth */
@@ -113,23 +113,22 @@ class Auth
 
         $errors = $auth->getErrors();
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             return $errors;
         }
 
-        if (!$auth->isAuthenticated()) {
+        if (! $auth->isAuthenticated()) {
             return ['error' => 'Could not authenticate'];
         }
 
         return null;
-
     }
 
     /**
      * Process a Saml response (assertion consumer service)
      * returns an array with errors if it can not logout
      */
-    function sls($retrieveParametersFromServer = false)
+    public function sls($retrieveParametersFromServer = false)
     {
         $auth = $this->auth;
 
@@ -152,7 +151,7 @@ class Auth
      * @throws \InvalidArgumentException if metadata is not correctly set
      * @throws OneLogin_Saml2_Error
      */
-    function getMetadata()
+    public function getMetadata()
     {
         $auth = $this->auth;
         $settings = $auth->getSettings();
@@ -160,10 +159,8 @@ class Auth
         $errors = $settings->validateMetadata($metadata);
 
         if (empty($errors)) {
-
             return $metadata;
         } else {
-
             throw new \InvalidArgumentException(
                 'Invalid SP metadata: ' . implode(', ', $errors),
                 OneLogin_Saml2_Error::METADATA_SP_INVALID
@@ -176,7 +173,7 @@ class Auth
      * @see \OneLogin_Saml2_Auth::getLastErrorReason()
      * @return string
      */
-    function getLastErrorReason()
+    public function getLastErrorReason()
     {
         return $this->auth->getLastErrorReason();
     }

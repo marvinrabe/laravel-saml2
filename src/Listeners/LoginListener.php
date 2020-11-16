@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 
 abstract class LoginListener
 {
-
     protected $blacklist;
 
     public function __construct(Blacklist $blacklist)
@@ -26,6 +25,7 @@ abstract class LoginListener
 
         if ($this->blacklist->has($messageId)) {
             Log::info('SSO failed: Message ID blacklisted', ['messageId' => $messageId]);
+
             return;
         }
 
@@ -35,5 +35,4 @@ abstract class LoginListener
 
         Auth::login($this->findUser($event->getUser()));
     }
-
 }

@@ -7,11 +7,10 @@ use Aacotroneo\Saml2\User;
 
 class Login
 {
-
     protected $user;
     protected $auth;
 
-    function __construct(User $user, Auth $auth)
+    public function __construct(User $user, Auth $auth)
     {
         $this->user = $user;
         $this->auth = $auth;
@@ -26,5 +25,4 @@ class Login
     {
         return $this->auth;
     }
-
 }

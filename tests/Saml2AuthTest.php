@@ -7,7 +7,6 @@ use Mockery as m;
 
 class Saml2AuthTest extends TestCase
 {
-
     public function testIsAuthenticated()
     {
         $auth = m::mock('OneLogin\Saml2\Auth');
@@ -16,7 +15,6 @@ class Saml2AuthTest extends TestCase
         $auth->shouldReceive('isAuthenticated')->andReturn('return');
 
         $this->assertEquals('return', $saml2->isAuthenticated());
-
     }
 
     public function testLogin()
@@ -38,13 +36,25 @@ class Saml2AuthTest extends TestCase
         $auth = m::mock('OneLogin\Saml2\Auth');
         $saml2 = new Auth($auth);
         $auth->shouldReceive('logout')
-            ->with($expectedReturnTo, [], $expectedNameId, $expectedSessionIndex, $expectedStay, $expectedNameIdFormat,
-                $expectedNameIdNameQualifier)
+            ->with(
+                $expectedReturnTo,
+                [],
+                $expectedNameId,
+                $expectedSessionIndex,
+                $expectedStay,
+                $expectedNameIdFormat,
+                $expectedNameIdNameQualifier
+            )
             ->once();
-        $saml2->logout($expectedReturnTo, $expectedNameId, $expectedSessionIndex, $expectedNameIdFormat, $expectedStay,
-            $expectedNameIdNameQualifier);
+        $saml2->logout(
+            $expectedReturnTo,
+            $expectedNameId,
+            $expectedSessionIndex,
+            $expectedNameIdFormat,
+            $expectedStay,
+            $expectedNameIdNameQualifier
+        );
     }
-
 
     public function testAcsError()
     {
@@ -58,7 +68,6 @@ class Saml2AuthTest extends TestCase
         $this->assertNotEmpty($error);
     }
 
-
     public function testAcsNotAutenticated()
     {
         $auth = m::mock('OneLogin\Saml2\Auth');
@@ -70,7 +79,6 @@ class Saml2AuthTest extends TestCase
 
         $this->assertNotEmpty($error);
     }
-
 
     public function testAcsOK()
     {
@@ -162,12 +170,10 @@ class Saml2AuthTest extends TestCase
 
         $user->parseAttributes([
             'email' => 'urn:oid:0.9.2342.19200300.100.1.3',
-            'displayName' => 'urn:oid:2.16.840.1.113730.3.1.241'
+            'displayName' => 'urn:oid:2.16.840.1.113730.3.1.241',
         ]);
 
         $this->assertEquals($user->email, ['test@example.com']);
         $this->assertEquals($user->displayName, ['Test User']);
     }
-
-
 }

@@ -11,10 +11,9 @@ use OneLogin\Saml2\Auth as OneLoginAuth;
  */
 class User
 {
-
     protected $auth;
 
-    function __construct(OneLoginAuth $auth)
+    public function __construct(OneLoginAuth $auth)
     {
         $this->auth = $auth;
     }
@@ -22,7 +21,7 @@ class User
     /**
      * @return string User Id retrieved from assertion processed this request
      */
-    function getUserId()
+    public function getUserId()
     {
         return $this->auth->getNameId();
     }
@@ -30,7 +29,7 @@ class User
     /**
      * @return array attributes retrieved from assertion processed this request
      */
-    function getAttributes()
+    public function getAttributes()
     {
         return $this->auth->getAttributes();
     }
@@ -40,7 +39,7 @@ class User
      * @param string $name The requested attribute of the user.
      * @return array|null Requested SAML attribute ($name).
      */
-    function getAttribute($name)
+    public function getAttribute($name)
     {
         return $this->auth->getAttribute($name);
     }
@@ -48,7 +47,7 @@ class User
     /**
      * @return array attributes retrieved from assertion processed this request
      */
-    function getAttributesWithFriendlyName()
+    public function getAttributesWithFriendlyName()
     {
         return $this->auth->getAttributesWithFriendlyName();
     }
@@ -56,12 +55,12 @@ class User
     /**
      * @return string the saml assertion processed this request
      */
-    function getRawSamlAssertion()
+    public function getRawSamlAssertion()
     {
         return app('request')->input('SAMLResponse'); //just this request
     }
 
-    function getIntendedUrl()
+    public function getIntendedUrl()
     {
         $relayState = app('request')->input('RelayState'); //just this request
 
@@ -78,7 +77,7 @@ class User
      * @param string $propertyName
      * @return array|null
      */
-    function parseUserAttribute($samlAttribute = null, $propertyName = null)
+    public function parseUserAttribute($samlAttribute = null, $propertyName = null)
     {
         if (empty($samlAttribute)) {
             return null;
@@ -94,16 +93,15 @@ class User
      * Parse the saml attributes and adds it to this user
      * @param array $attributes Array of properties which need to be parsed, like this ['email' => 'urn:oid:0.9.2342.19200300.100.1.3']
      */
-    function parseAttributes($attributes = [])
+    public function parseAttributes($attributes = [])
     {
         foreach ($attributes as $propertyName => $samlAttribute) {
             $this->parseUserAttribute($samlAttribute, $propertyName);
         }
     }
 
-    function getSessionIndex()
+    public function getSessionIndex()
     {
         return $this->auth->getSessionIndex();
     }
-
 }

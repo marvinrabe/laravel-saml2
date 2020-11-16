@@ -8,20 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 
-
 class Saml2Controller extends Controller
 {
-
     protected $saml2Auth;
 
     /**
      * @param Auth $saml2Auth injected.
      */
-    function __construct(Auth $saml2Auth)
+    public function __construct(Auth $saml2Auth)
     {
         $this->saml2Auth = $saml2Auth;
     }
-
 
     /**
      * Generate local sp metadata
@@ -30,7 +27,6 @@ class Saml2Controller extends Controller
      */
     public function metadata()
     {
-
         $metadata = $this->saml2Auth->getMetadata();
 
         return response($metadata, 200, ['Content-Type' => 'text/xml']);
@@ -45,7 +41,7 @@ class Saml2Controller extends Controller
         try {
             $errors = $this->saml2Auth->acs();
 
-            if (!empty($errors)) {
+            if (! empty($errors)) {
                 throw new \RuntimeException($this->saml2Auth->getLastErrorReason());
             }
 
@@ -58,10 +54,11 @@ class Saml2Controller extends Controller
             if ($redirectUrl !== null) {
                 return redirect($redirectUrl);
             }
-            return redirect(config('saml2.loginRoute'));
 
+            return redirect(config('saml2.loginRoute'));
         } catch (\Exception $e) {
             Log::error('SSO failed: ' . $e->getMessage());
+
             return redirect(config('saml2.errorRoute'));
         }
     }
@@ -74,7 +71,7 @@ class Saml2Controller extends Controller
     public function sls()
     {
         $error = $this->saml2Auth->sls(config('saml2.retrieveParametersFromServer'));
-        if (!empty($error)) {
+        if (! empty($error)) {
             throw new \Exception("Could not log out");
         }
 
@@ -99,5 +96,4 @@ class Saml2Controller extends Controller
     {
         $this->saml2Auth->login(config('saml2.loginRoute'));
     }
-
 }
