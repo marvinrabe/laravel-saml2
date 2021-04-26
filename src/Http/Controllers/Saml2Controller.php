@@ -36,7 +36,7 @@ class Saml2Controller extends Controller
         try {
             $errors = $this->saml2Auth->acs();
 
-            if (! empty($errors)) {
+            if (!empty($errors)) {
                 throw new \RuntimeException($this->saml2Auth->getLastErrorReason());
             }
 
@@ -66,8 +66,9 @@ class Saml2Controller extends Controller
     public function sls()
     {
         $error = $this->saml2Auth->sls(config('saml2.retrieveParametersFromServer'));
-        if (! empty($error)) {
-            throw new \Exception("Could not log out");
+
+        if (!empty($error)) {
+            Log::error('SLO failed.', ['errors' => $error]);
         }
 
         return redirect(config('saml2.logoutRoute')); //may be set a configurable default
