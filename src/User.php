@@ -11,6 +11,9 @@ use OneLogin\Saml2\Auth as OneLoginAuth;
  */
 class User
 {
+    /**
+     * @var OneLoginAuth
+     */
     protected $auth;
 
     public function __construct(OneLoginAuth $auth)

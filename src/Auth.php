@@ -13,8 +13,6 @@ class Auth
      */
     protected $auth;
 
-    protected $samlAssertion;
-
     public function __construct(SAMLAuth $auth)
     {
         $this->auth = $auth;
@@ -25,9 +23,7 @@ class Auth
      */
     public function isAuthenticated()
     {
-        $auth = $this->auth;
-
-        return $auth->isAuthenticated();
+        return $this->auth->isAuthenticated();
     }
 
     /**
@@ -51,12 +47,12 @@ class Auth
     /**
      * Initiate a saml2 login flow. It will redirect! Before calling this, check if user is
      * authenticated (here in saml2). That would be true when the assertion was received this request.
-     * @param  string|null  $returnTo  The target URL the user should be returned to after login.
-     * @param  array  $parameters  Extra parameters to be added to the GET
-     * @param  bool  $forceAuthn  When true the AuthNReuqest will set the ForceAuthn='true'
-     * @param  bool  $isPassive  When true the AuthNReuqest will set the Ispassive='true'
-     * @param  bool  $stay  True if we want to stay (returns the url string) False to redirect
-     * @param  bool  $setNameIdPolicy  When true the AuthNReuqest will set a nameIdPolicy element
+     * @param string|null $returnTo The target URL the user should be returned to after login.
+     * @param array $parameters Extra parameters to be added to the GET
+     * @param bool $forceAuthn When true the AuthNReuqest will set the ForceAuthn='true'
+     * @param bool $isPassive When true the AuthNReuqest will set the Ispassive='true'
+     * @param bool $stay True if we want to stay (returns the url string) False to redirect
+     * @param bool $setNameIdPolicy When true the AuthNReuqest will set a nameIdPolicy element
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
      * @throws \OneLogin\Saml2\Error
      */
@@ -67,21 +63,20 @@ class Auth
         $isPassive = false,
         $stay = false,
         $setNameIdPolicy = true
-    ) {
-        $auth = $this->auth;
-
-        return $auth->login($returnTo, $parameters, $forceAuthn, $isPassive, $stay, $setNameIdPolicy);
+    )
+    {
+        return $this->auth->login($returnTo, $parameters, $forceAuthn, $isPassive, $stay, $setNameIdPolicy);
     }
 
     /**
      * Initiate a saml2 logout flow. It will close session on all other SSO services. You should close
      * local session if applicable.
-     * @param  string|null  $returnTo  The target URL the user should be returned to after logout.
-     * @param  string|null  $nameId  The NameID that will be set in the LogoutRequest.
-     * @param  string|null  $sessionIndex  The SessionIndex (taken from the SAML Response in the SSO process).
-     * @param  string|null  $nameIdFormat  The NameID Format will be set in the LogoutRequest.
-     * @param  bool  $stay  True if we want to stay (returns the url string) False to redirect
-     * @param  string|null  $nameIdNameQualifier  The NameID NameQualifier will be set in the LogoutRequest.
+     * @param string|null $returnTo The target URL the user should be returned to after logout.
+     * @param string|null $nameId The NameID that will be set in the LogoutRequest.
+     * @param string|null $sessionIndex The SessionIndex (taken from the SAML Response in the SSO process).
+     * @param string|null $nameIdFormat The NameID Format will be set in the LogoutRequest.
+     * @param bool $stay True if we want to stay (returns the url string) False to redirect
+     * @param string|null $nameIdNameQualifier The NameID NameQualifier will be set in the LogoutRequest.
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
      * @throws \OneLogin\Saml2\Error
      */
@@ -92,10 +87,9 @@ class Auth
         $nameIdFormat = null,
         $stay = false,
         $nameIdNameQualifier = null
-    ) {
-        $auth = $this->auth;
-
-        return $auth->logout($returnTo, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier);
+    )
+    {
+        return $this->auth->logout($returnTo, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier);
     }
 
     /**
@@ -108,11 +102,11 @@ class Auth
 
         $errors = $this->auth->getErrors();
 
-        if (! empty($errors)) {
+        if (!empty($errors)) {
             return $errors;
         }
 
-        if (! $this->auth->isAuthenticated()) {
+        if (!$this->auth->isAuthenticated()) {
             return ['error' => 'Could not authenticate'];
         }
 
@@ -125,17 +119,15 @@ class Auth
      */
     public function sls($retrieveParametersFromServer = false)
     {
-        $auth = $this->auth;
-
         // destroy the local session by firing the Logout event
         $keep_local_session = false;
         $session_callback = function () {
             event(new Logout());
         };
 
-        $auth->processSLO($keep_local_session, null, $retrieveParametersFromServer, $session_callback);
+        $this->auth->processSLO($keep_local_session, null, $retrieveParametersFromServer, $session_callback);
 
-        $errors = $auth->getErrors();
+        $errors = $this->auth->getErrors();
 
         return $errors;
     }
@@ -148,8 +140,7 @@ class Auth
      */
     public function getMetadata()
     {
-        $auth = $this->auth;
-        $settings = $auth->getSettings();
+        $settings = $this->auth->getSettings();
         $metadata = $settings->getSPMetadata();
         $errors = $settings->validateMetadata($metadata);
 
@@ -157,7 +148,7 @@ class Auth
             return $metadata;
         } else {
             throw new \InvalidArgumentException(
-                'Invalid SP metadata: '.implode(', ', $errors),
+                'Invalid SP metadata: ' . implode(', ', $errors),
                 SAMLError::METADATA_SP_INVALID
             );
         }
