@@ -1,8 +1,8 @@
 <?php
 
-namespace MarvinRabe\LaravelSAML2\Tests;
+namespace MarvinRabe\LaravelSaml2\Tests;
 
-use Aacotroneo\Saml2\SAML2ServiceProvider;
+use MarvinRabe\LaravelSaml2\Provider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -10,7 +10,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            SAML2ServiceProvider::class,
+            Provider::class
         ];
     }
 

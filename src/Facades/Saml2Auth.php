@@ -1,8 +1,9 @@
 <?php
 
-namespace Aacotroneo\Saml2\Facades;
+namespace MarvinRabe\LaravelSaml2\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use MarvinRabe\LaravelSaml2\Auth;
 
 class Saml2Auth extends Facade
 {
@@ -13,6 +14,6 @@ class Saml2Auth extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Aacotroneo\Saml2\Auth::class;
+        return Auth::class;
     }
 }

@@ -1,28 +1,17 @@
 <?php
 
-namespace Aacotroneo\Saml2\Events;
+namespace MarvinRabe\LaravelSaml2\Events;
 
-use Aacotroneo\Saml2\Auth;
-use Aacotroneo\Saml2\User;
+use MarvinRabe\LaravelSaml2\User;
 
 class Login
 {
-    protected $user;
-    protected $auth;
-
-    public function __construct(User $user, Auth $auth)
+    public function __construct(protected User $user)
     {
-        $this->user = $user;
-        $this->auth = $auth;
     }
 
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
-    }
-
-    public function getAuth()
-    {
-        return $this->auth;
     }
 }

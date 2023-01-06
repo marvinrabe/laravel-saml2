@@ -1,6 +1,6 @@
 <?php
 
-namespace Aacotroneo\Saml2\Events;
+namespace MarvinRabe\LaravelSaml2\Events;
 
 class Logout
 {

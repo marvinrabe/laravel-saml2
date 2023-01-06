@@ -1,30 +1,19 @@
 <?php
 
-namespace Aacotroneo\Saml2;
+namespace MarvinRabe\LaravelSaml2;
 
 use OneLogin\Saml2\Auth as OneLoginAuth;
 
-/**
- * A simple class that represents the user that 'came' inside the saml2 assertion
- * Class Saml2User
- * @package Aacotroneo\Saml2
- */
 class User
 {
-    /**
-     * @var OneLoginAuth
-     */
-    protected $auth;
-
-    public function __construct(OneLoginAuth $auth)
+    public function __construct(protected OneLoginAuth $auth)
     {
-        $this->auth = $auth;
     }
 
     /**
-     * @return string User Id retrieved from assertion processed this request
+     * @return string Name Id retrieved from assertion processed this request
      */
-    public function getUserId()
+    public function getNameId()
     {
         return $this->auth->getNameId();
     }
@@ -39,7 +28,7 @@ class User
 
     /**
      * Returns the requested SAML attribute
-     * @param string $name The requested attribute of the user.
+     * @param  string  $name  The requested attribute of the user.
      * @return array|null Requested SAML attribute ($name).
      */
     public function getAttribute($name)
@@ -76,8 +65,8 @@ class User
 
     /**
      * Parses a SAML property and adds this property to this user or returns the value
-     * @param string $samlAttribute
-     * @param string $propertyName
+     * @param  string  $samlAttribute
+     * @param  string  $propertyName
      * @return array|null
      */
     public function parseUserAttribute($samlAttribute = null, $propertyName = null)
@@ -94,17 +83,12 @@ class User
 
     /**
      * Parse the saml attributes and adds it to this user
-     * @param array $attributes Array of properties which need to be parsed, like this ['email' => 'urn:oid:0.9.2342.19200300.100.1.3']
+     * @param  array  $attributes  Array of properties which need to be parsed, like this ['email' => 'urn:oid:0.9.2342.19200300.100.1.3']
      */
     public function parseAttributes($attributes = [])
     {
         foreach ($attributes as $propertyName => $samlAttribute) {
             $this->parseUserAttribute($samlAttribute, $propertyName);
         }
-    }
-
-    public function getSessionIndex()
-    {
-        return $this->auth->getSessionIndex();
     }
 }

@@ -1,23 +1,16 @@
 <?php
 
-namespace Aacotroneo\Saml2\Http\Controllers;
+namespace MarvinRabe\LaravelSaml2\Http\Controllers;
 
-use Aacotroneo\Saml2\Auth;
-use Aacotroneo\Saml2\Events\Login;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use MarvinRabe\LaravelSaml2\Auth;
 
 class Saml2Controller extends Controller
 {
-    protected $saml2Auth;
-
-    /**
-     * @param Auth $saml2Auth injected.
-     */
-    public function __construct(Auth $saml2Auth)
+    public function __construct(protected Auth $saml2Auth)
     {
-        $this->saml2Auth = $saml2Auth;
     }
 
     public function metadata()
@@ -34,15 +27,7 @@ class Saml2Controller extends Controller
     public function acs()
     {
         try {
-            $errors = $this->saml2Auth->acs();
-
-            if (! empty($errors)) {
-                throw new \RuntimeException($this->saml2Auth->getLastErrorReason());
-            }
-
-            $user = $this->saml2Auth->getSaml2User();
-
-            event(new Login($user, $this->saml2Auth));
+            $user = $this->saml2Auth->acs();
 
             $redirectUrl = $user->getIntendedUrl();
 
@@ -52,7 +37,7 @@ class Saml2Controller extends Controller
 
             return redirect(config('saml2.loginRoute'));
         } catch (\Exception $e) {
-            Log::error('SSO failed: ' . $e->getMessage());
+            Log::error('SSO failed: '.$e->getMessage());
 
             return redirect(config('saml2.errorRoute'));
         }
@@ -67,7 +52,7 @@ class Saml2Controller extends Controller
     {
         $error = $this->saml2Auth->sls(config('saml2.retrieveParametersFromServer'));
 
-        if (! empty($error)) {
+        if (!empty($error)) {
             Log::error('SLO failed.', ['errors' => $error]);
         }
 
