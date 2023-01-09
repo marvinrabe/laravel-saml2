@@ -5,15 +5,15 @@ namespace MarvinRabe\LaravelSaml2;
 use MarvinRabe\LaravelSaml2\Events\Login;
 use MarvinRabe\LaravelSaml2\Events\Logout;
 use Illuminate\Support\Facades\Log;
-use OneLogin\Saml2\Auth as SAMLAuth;
-use OneLogin\Saml2\Error as SAMLError;
+use OneLogin\Saml2\Auth as OneLoginAuth;
+use OneLogin\Saml2\Error as OneLoginError;
 use RuntimeException;
 
 class Auth
 {
     public function __construct(
-        protected SAMLAuth $auth,
-        protected Saml2UserProvider $provider
+        protected OneLoginAuth $auth,
+        protected ?Saml2UserProvider $provider = null
     ) {
     }
 
@@ -107,8 +107,18 @@ class Auth
         $user = $this->getSaml2User();
         Log::info('SSO User: '.$user->getNameId(), ['attributes' => $user->getAttributes()]);
 
+        if ($this->provider === null) {
+            throw new RuntimeException('No user provider configured');
+        }
+
+        $realUser = $this->provider->retrieveByNameId($user->getNameId());
+
+        if ($realUser === null) {
+            throw new RuntimeException('User with NameId '.$user->getNameId().' not found');
+        }
+
         \Illuminate\Support\Facades\Auth::login(
-            $this->provider->retrieveByNameId($user->getNameId())
+            $realUser
         );
 
         event(new Login($user));
@@ -152,7 +162,7 @@ class Auth
         } else {
             throw new \InvalidArgumentException(
                 'Invalid SP metadata: '.implode(', ', $errors),
-                SAMLError::METADATA_SP_INVALID
+                OneLoginError::METADATA_SP_INVALID
             );
         }
     }

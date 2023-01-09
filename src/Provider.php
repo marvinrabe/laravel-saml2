@@ -4,8 +4,8 @@ namespace MarvinRabe\LaravelSaml2;
 
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use OneLogin\Saml2\Auth as OneLogin_Saml2_Auth;
-use OneLogin\Saml2\Utils as OneLogin_Saml2_Utils;
+use OneLogin\Saml2\Auth as OneLoginAuth;
+use OneLogin\Saml2\Utils as OneLoginUtils;
 
 class Provider extends ServiceProvider
 {
@@ -20,22 +20,13 @@ class Provider extends ServiceProvider
         ]);
 
         if (config('saml2.proxyVars', false)) {
-            OneLogin_Saml2_Utils::setProxyVars(true);
+            OneLoginUtils::setProxyVars(true);
         }
     }
 
     public function register(): void
     {
-        $this->registerOneLoginInContainer();
-
-        $this->app->singleton(Auth::class, function ($app) {
-            return new Auth($app['OneLogin_Saml2_Auth']);
-        });
-    }
-
-    protected function registerOneLoginInContainer()
-    {
-        $this->app->singleton('OneLogin_Saml2_Auth', function ($app) {
+        $this->app->singleton(OneLoginAuth::class, function ($app) {
             $config = config('saml2');
             if (empty($config['sp']['entityId'])) {
                 $config['sp']['entityId'] = URL::route('saml_metadata');
@@ -57,7 +48,7 @@ class Provider extends ServiceProvider
                 $config['idp']['x509cert'] = $this->extractCertFromFile($config['idp']['x509cert']);
             }
 
-            return new OneLogin_Saml2_Auth($config);
+            return new OneLoginAuth($config);
         });
     }
 
