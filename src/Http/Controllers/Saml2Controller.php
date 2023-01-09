@@ -39,7 +39,7 @@ class Saml2Controller extends Controller
         } catch (\Exception $e) {
             Log::error('SSO failed: '.$e->getMessage());
 
-            return redirect(config('saml2.errorRoute'));
+            return redirect(config('saml2.errorRoute'))->with('saml_error', $e->getMessage());
         }
     }
 
